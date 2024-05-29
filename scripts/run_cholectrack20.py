@@ -16,23 +16,37 @@ Command Line Arguments: Defaults, # Comments
         'OUTPUT_SUMMARY': True,
         'OUTPUT_DETAILED': True,
         'PLOT_CURVES': True,
-    Dataset arguments:        
-         'GT_FOLDER': os.path.join(code_path, 'data/gt/mot_challenge/'),  # Location of GT data
-         'GT_LOC_FORMAT': "{gt_folder}/labels/{seq}.json",  # '{gt_folder}/{seq}/gt/gt.txt'
-         'TRACKERS_FOLDER': os.path.join(code_path, 'data/trackers/CKT20/'),  # Trackers location
-         'TRACKER_SUB_FOLDER': 'labels',  # Tracker files are in TRACKER_FOLDER/tracker_name/TRACKER_SUB_FOLDER
-         'TRACKERS_TO_EVAL': None,  # Filenames of trackers to eval (if None, all in folder)
-         'TRACKER_DISPLAY_NAMES': None,  # Names of trackers to display, if None: TRACKERS_TO_EVAL
-         'OUTPUT_FOLDER': None,  # Where to save eval results (if None, same as TRACKERS_FOLDER)
-         'OUTPUT_SUB_FOLDER': '',  # Output files are saved in OUTPUT_FOLDER/tracker_name/OUTPUT_SUB_FOLDER
-         'BENCHMARK': 'CTK20',  # Valid: 'MOT17', 'MOT16', 'MOT20', 'MOT15'
-         'TRACK_TYPE': 'intraoperative_track',  # Valid: 'intraoperative_track', 'intracorporeal_track', 'visibility_track
-         'CLASSES_TO_EVAL': ['grasper','bipolar','hook', 'scissors','clipper','irrigator','specimen-bag'],
-         'SEQ_TO_EVAL': '1,6,7,12,25,39,92,111', # comma sep videos to eval
-         'SPLIT_TO_EVAL': 'testing',  # Validation, 'training', 'testing', 'all'
-         'INPUT_AS_ZIP': False,  # Whether tracker input files are zipped
-         'PRINT_CONFIG': True,  # Whether to print current config
-         'DO_PREPROC': True,  # Whether to perform preprocessing (never done for MOT15)               
+        
+    Dataset arguments:
+        'GT_FOLDER': os.path.join(code_path, 'data/CholecTrack20/'),  # Location of GT data
+        'GT_LOC_FORMAT': "{gt_folder}/{split}/{seq}/{seq}.json",  # gt label identifier per video            
+        'TRACKERS_FOLDER': os.path.join(code_path, 'data/trackers/CTK20/'),  # Trackers location
+        'TRACKER_SUB_FOLDER': 'labels',  # Tracker files are in TRACKER_FOLDER/tracker_name/TRACKER_SUB_FOLDER
+        'TRACKERS_TO_EVAL': None,  # Filenames of trackers to eval (if None, all in folder)
+        'TRACKER_DISPLAY_NAMES': None,  # Names of trackers to display, if None: TRACKERS_TO_EVAL                        
+        'OUTPUT_FOLDER': None,  # Where to save eval results (if None, same as TRACKERS_FOLDER)
+        'OUTPUT_SUB_FOLDER': '',  # Output files are saved in OUTPUT_FOLDER/tracker_name/OUTPUT_SUB_FOLDER            
+        'BENCHMARK': 'CTK20',  # Valid: 'CTK20'
+        'TRACK_TYPE': 'intraoperative_track',  # Valid: 'intraoperative_track', 'intracorporeal_track', 'visibility_track'
+        'IMAGE_HEIGHT': 480,
+        'IMAGE_WIDTH': 854,
+        'VISUAL_CHALLENGE': '',
+        'VALID_VISUAL_CHALLENGES': ['blurred', 'bleeding', 'crowded', 'occluded', 'reflection', 'smoke', 'stainedlens', 'undercoverage', 'none', "all"],
+        'CLASSES_TO_EVAL': ['grasper','bipolar','hook', 'scissors','clipper','irrigator','specimen-bag'],
+        'VALID_CLASSES': {0:'grasper', 1:'bipolar', 2:'hook', 3:'scissors', 4:'clipper', 5:'irrigator', 6:'specimen-bag', -1:'combine'},
+        'COMBINE_CLASSES': False,
+        'SEQ_TO_EVAL': '1,6,7,12,25,39,92,111', # comma sep videos to eval
+        'VALID_SEQS': '1,2,4,6,7,11,12,13,17,23,25,30,31,37,39,92,96,103,110,111', # all videos            
+        'SPLIT_TO_EVAL': 'testing',  # validation: 'training', 'testing', 'all'
+        'INPUT_AS_ZIP': False,  # Whether tracker input files are zipped
+        'PRINT_CONFIG': True,  # Whether to print current config
+        'DO_PREPROC': True,  # Whether to perform preprocessing        
+        'SEQMAP_FOLDER': None,  # Where seqmaps are found (if None, GT_FOLDER/seqmaps)
+        'SEQMAP_FILE': None,  # Directly specify seqmap file (if none use seqmap_folder/benchmark-split_to_eval)
+        'SEQ_INFO': None,  # If not None, directly specify sequences to eval and their number of timesteps            
+        'SKIP_SPLIT_FOL': False,  # If False, data is in GT_FOLDER/BENCHMARK-SPLIT_TO_EVAL/ and in
+                                  # TRACKERS_FOLDER/BENCHMARK-SPLIT_TO_EVAL/tracker/
+                                  # If True, then the middle 'benchmark-split' folder is skipped for both.                                                                   
     Metric arguments:
         'METRICS': ['HOTA', 'CLEAR', 'Identity', 'VACE']
 """
@@ -56,13 +70,12 @@ COMBINE_CLASSES = False
 VISUAL_CHALLENGE = 'all' #@ Choices = ['blurred', 'bleeding', 'crowded', 'occluded', 'reflection', 'smoke', 'stainedlens', 'undercoverage', 'all', None]
 
 GT_FOLDER = '/path/to/CholecTrack20/Dataset/'
-GT_FOLDER = '/mnt/camma5_data2/nwoye/work/dataset/CholecTrack20/RELEASE/CholecTrack20/'
 
-TRACKERS_FOLDER = '/mnt/camma5_data2/nwoye/work/dataset/CholecTrack20/exp/tools_bbox_tracking/pub/tracking/proposed/25fps/'+TRACK_TYPE
+TRACKERS_FOLDER = '/path/to/tracking/results/'+TRACK_TYPE
 TRACKER_SUB_FOLDER = ''
-TRACKERS = ['surgitrack_fsl_bmd_wav','surgitrack_ssl_bmd_wav']
+TRACKERS = ['surgitrack','botsort', 'bytetrack']
 
-OUTPUT_FOLDER = "/mnt/camma5_data2/nwoye/work/code/experiments/tools_bbox_tracking/analysisB/outputs/results/"
+OUTPUT_FOLDER = "/path/to/write/outputs/results/"
 OUTPUT_SUB_FOLDER = TRACK_TYPE
 
 
