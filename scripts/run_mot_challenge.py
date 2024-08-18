@@ -57,6 +57,7 @@ if __name__ == '__main__':
         else:
             parser.add_argument("--" + setting)
     args = parser.parse_args().__dict__
+    print(f"ARGS :{args}")
     for setting in args.keys():
         if args[setting] is not None:
             if type(config[setting]) == type(True):
@@ -72,6 +73,8 @@ if __name__ == '__main__':
                 x = None
             elif setting == 'SEQ_INFO':
                 x = dict(zip(args[setting], [None]*len(args[setting])))
+            elif setting == 'SEQMAP_FILE':
+                x = args[setting][0]
             else:
                 x = args[setting]
             config[setting] = x
